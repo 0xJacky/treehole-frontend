@@ -123,8 +123,8 @@
                             this.$recaptcha('/admin/login').then((token) => {
                                 values.token = token
                                 values.grant_type = 'password'
-                                values.client_id = 'dce473a5-e38c-46f2-b2ba-e2874e543df1'
-                                values.client_secret = 'o1r7tieBO6m4Rmu0JBDqijLYHXuLrK2WdcNUIGcJ'
+                                values.client_id = process.env.VUE_APP_CLIENT_ID
+                                values.client_secret = process.env.VUE_APP_CLIENT_SECRET
                                 this.$http.post('/authorizations', values)
                                     .then((response) => {
                                         let expireDays = 1000 * 60 * 60 * 24 * 15

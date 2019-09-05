@@ -14,7 +14,6 @@
 			</a-popconfirm>
 			<a-popconfirm
 					slot="actions"
-					v-if="is_login"
 					title="你确定要举报这条动态?"
 					@confirm="report(comment.id)" okText="是的"
 					cancelText="再想想">

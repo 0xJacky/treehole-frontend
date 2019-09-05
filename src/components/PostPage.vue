@@ -4,6 +4,12 @@
 		<div class="post-info">
 			<a-popconfirm
 					v-if="is_login"
+					title="你确定要删除这条动态?"
+					@confirm="remove(post.id)" okText="是的"
+					cancelText="再想想">
+				<a href="#">删除</a> ·
+			</a-popconfirm>
+			<a-popconfirm
 					title="你确定要举报这条动态?"
 					@confirm="report(post.id)" okText="是的"
 					cancelText="再想想">
@@ -101,6 +107,17 @@
                             });
                     });
                 });
+            },
+            remove(id) {
+                this.$http.delete('/post', {data: {id: id}})
+                    .then(() => {
+                        this.$message.success('删除成功')
+                        this.$emit('get_list')
+                    })
+                    .catch((error) => {
+                        // eslint-disable-next-line no-console
+                        console.log(error)
+                    })
             }
         }
     }
