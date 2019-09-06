@@ -6,6 +6,24 @@
 				<img :src="comment.upload.url"/>
 			</div>
 			<span slot="datetime">{{moment(comment.created_at).fromNow()}}</span>
+			<span slot="actions">
+          <a-tooltip title="踩">
+            <a-icon type="dislike" :theme="comment.favour == 0 ? 'filled' : 'outlined'" @click="dislikes(comment.id)"
+            />
+          </a-tooltip>
+          <span style="padding-left:3px;cursor: auto">
+            {{ comment.dislikes }}
+          </span>
+        </span>
+			<span slot="actions">
+          <a-tooltip title="赞">
+            <a-icon type="like" :theme="comment.favour == 1 ? 'filled' : 'outlined'" @click="likes(comment.id)"
+            />
+          </a-tooltip>
+          <span style="padding-left: 3px;cursor: auto">
+            {{ comment.likes }}
+          </span>
+            </span>
 			<span slot="actions" @click="reply=true">回复</span>
 			<a-popconfirm
 					slot="actions"
@@ -74,13 +92,43 @@
                     .catch(function (error) {
                         t.$message.error(error.error)
                     });
+            },
+            likes() {
+                // eslint-disable-next-line eqeqeq
+                if (this.comment.favour != 1) {
+                    const t = this
+                    this.$http.post('/favour/like', {comment_id: this.comment.id})
+                        .then((response) => {
+                            this.comment.favour = 1
+                            this.comment.likes = response.likes
+                        })
+                        .catch(function (error) {
+                            t.$message.error(error.error)
+                        });
+
+                }
+            },
+            dislikes() {
+                // eslint-disable-next-line eqeqeq
+                if (this.comment.favour != 0) {
+                    const t = this
+                    this.$http.post('/favour/dislike', {comment_id: this.comment.id})
+                        .then((response) => {
+                            this.comment.favour = 0
+                            this.comment.dislikes = response.dislikes
+                        })
+                        .catch(function (error) {
+                            t.$message.error(error.error)
+                        });
+
+                }
             }
         }
     }
 </script>
 
 <style scoped>
-	.post-img img{
+	.post-img img {
 		width: 50%;
 	}
 </style>

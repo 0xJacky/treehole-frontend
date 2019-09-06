@@ -4,6 +4,26 @@
 		<div class="post-img" v-if="post.upload_id">
 			<img :src="post.upload.url"/>
 		</div>
+		<div class="favour center">
+        <span class="action">
+          <a-tooltip title="踩">
+            <a-icon type="dislike" :theme="post.favour == 0 ? 'filled' : 'outlined'" @click="dislikes(post.id)"
+            />
+          </a-tooltip>
+          <span style="padding-left:3px;cursor: auto">
+            {{ post.dislikes }}
+          </span>
+        </span>
+			<span class="action">
+          <a-tooltip title="赞">
+            <a-icon type="like" :theme="post.favour == 1 ? 'filled' : 'outlined'" @click="likes(post.id)"
+            />
+          </a-tooltip>
+          <span style="padding-left: 3px;cursor: auto">
+            {{ post.likes }}
+          </span>
+        </span>
+		</div>
 		<div class="post-info">
 			<a-popconfirm
 					v-if="is_login"
@@ -121,6 +141,36 @@
                         // eslint-disable-next-line no-console
                         console.log(error)
                     })
+            },
+            likes() {
+                // eslint-disable-next-line eqeqeq
+                if (this.post.favour != 1) {
+                    const t = this
+                    this.$http.post('/favour/like', {post_id: this.post.id})
+                        .then((response) => {
+                            this.post.favour = 1
+                            this.post.likes = response.likes
+                        })
+                        .catch(function (error) {
+                            t.$message.error(error.error)
+                        });
+
+                }
+            },
+            dislikes() {
+                // eslint-disable-next-line eqeqeq
+                if (this.post.favour != 0) {
+                    const t = this
+                    this.$http.post('/favour/dislike', {post_id: this.post.id})
+                        .then((response) => {
+                            this.post.favour = 0
+                            this.post.dislikes = response.dislikes
+                        })
+                        .catch(function (error) {
+                            t.$message.error(error.error)
+                        });
+
+                }
             }
         }
     }
@@ -135,5 +185,9 @@
 
 	.post-img img {
 		width: 50%;
+	}
+
+	.favour .action {
+		padding: 10px;
 	}
 </style>
