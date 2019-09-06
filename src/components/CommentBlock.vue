@@ -2,6 +2,9 @@
 	<div>
 		<a-comment>
 			<p slot="content">{{ comment.content }}</p>
+			<div slot="content" class="post-img" v-if="comment.upload_id">
+				<img :src="comment.upload.url"/>
+			</div>
 			<span slot="datetime">{{moment(comment.created_at).fromNow()}}</span>
 			<span slot="actions" @click="reply=true">回复</span>
 			<a-popconfirm
@@ -77,5 +80,7 @@
 </script>
 
 <style scoped>
-
+	.post-img img{
+		width: 50%;
+	}
 </style>

@@ -1,6 +1,15 @@
 <template>
 	<a @click="$emit('show_modal')">
-		<a-card class="card" :bordered="false">
+		<a-card
+				class="card"
+				:bordered="false"
+				hoverable>
+			<img
+					v-if="post.upload_id"
+					alt="example"
+					:src="post.upload.url"
+					slot="cover"
+			/>
 			<p class="post-content">{{ post.content }}</p>
 			<div class="post-info">
 				<a-popconfirm
@@ -63,6 +72,17 @@
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 7;
+	}
+	.ant-card-cover {
+		overflow: hidden;
+		width: 100%;
+		height: 120px;
+	}
+	.ant-card-cover img {
+		border-radius: 10px 10px 0 0;
+		width: 100%;
+		height: 120px;
+		object-fit: cover;
 	}
 
 </style>

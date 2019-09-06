@@ -1,6 +1,9 @@
 <template>
 	<div class="post-page">
 		<p class="post-content">{{ post.content }}</p>
+		<div class="post-img" v-if="post.upload_id">
+			<img :src="post.upload.url"/>
+		</div>
 		<div class="post-info">
 			<a-popconfirm
 					v-if="is_login"
@@ -128,5 +131,9 @@
 		white-space: pre-wrap;
 		margin: 0 0 10px 0;
 		line-height: 20px;
+	}
+
+	.post-img img {
+		width: 50%;
 	}
 </style>
