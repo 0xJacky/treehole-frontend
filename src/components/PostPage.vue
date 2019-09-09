@@ -7,7 +7,7 @@
 		<div class="favour center">
         <span class="action">
           <a-tooltip title="踩">
-            <a-icon type="dislike" :theme="post.favour == 0 ? 'filled' : 'outlined'" @click="dislikes(post.id)"
+            <a-icon type="dislike" :theme="favour === 0 ? 'filled' : 'outlined'" @click="dislikes(post.id)"
             />
           </a-tooltip>
           <span style="padding-left:3px;cursor: auto">
@@ -16,7 +16,7 @@
         </span>
 			<span class="action">
           <a-tooltip title="赞">
-            <a-icon type="like" :theme="post.favour == 1 ? 'filled' : 'outlined'" @click="likes(post.id)"
+            <a-icon type="like" :theme="favour === 1 ? 'filled' : 'outlined'" @click="likes(post.id)"
             />
           </a-tooltip>
           <span style="padding-left: 3px;cursor: auto">
@@ -54,10 +54,15 @@
 
 <script>
     import moment from 'moment'
-    import CommentBlock from "./CommentBlock";
-    import Editor from "./Editor";
+    import CommentBlock from "./CommentBlock"
+    import Editor from "./Editor"
     import Vue from 'vue'
     import {VueReCaptcha} from 'vue-recaptcha-v3'
+    import VueLocalForage from 'vue-localforage'
+    import localforage from 'localforage'
+    const uuidv4 = require('uuid/v4');
+
+    Vue.use(VueLocalForage)
 
     Vue.use(VueReCaptcha, {
         siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
@@ -81,7 +86,8 @@
                 post: {
                     comments: {},
                     category: {}
-                }
+                },
+                favour: ''
             }
         },
         computed: {
@@ -100,10 +106,14 @@
                 if (this.should_reload_comment) {
                     this.init()
                 }
+            },
+            favour() {
+
             }
         },
         beforeMount() {
             this.init()
+            this.$setStorageDriver(localforage.LOCALSTORAGE)
         },
         methods: {
             init() {
@@ -112,6 +122,7 @@
                     .then((response) => {
                         this.post = response
                         this.$store.dispatch('comment_reloaded')
+                        this.is_like(response.id)
                     })
                     .catch(function (error) {
                         t.$message.error(error.error)
@@ -144,12 +155,14 @@
             },
             likes() {
                 // eslint-disable-next-line eqeqeq
-                if (this.post.favour != 1) {
+                if (this.favour != 1) {
                     const t = this
-                    this.$http.post('/favour/like', {post_id: this.post.id})
+                    this.$http.post('/favour/like', {post_id: this.post.id, o:this.favour === 0 ? uuidv4() : ''})
                         .then((response) => {
-                            this.post.favour = 1
+                            this.favour = 1
                             this.post.likes = response.likes
+                            this.post.dislikes = response.dislikes
+                            this.$setItem(this.post.id, '1')
                         })
                         .catch(function (error) {
                             t.$message.error(error.error)
@@ -159,18 +172,34 @@
             },
             dislikes() {
                 // eslint-disable-next-line eqeqeq
-                if (this.post.favour != 0) {
+                if (this.favour != 0) {
                     const t = this
-                    this.$http.post('/favour/dislike', {post_id: this.post.id})
+                    this.$http.post('/favour/dislike', {post_id: this.post.id, o:this.favour === 1 ? uuidv4() : ''})
                         .then((response) => {
-                            this.post.favour = 0
+                            this.favour = 0
                             this.post.dislikes = response.dislikes
+                            this.post.likes = response.likes
+                            this.$setItem(this.post.id, '0')
                         })
                         .catch(function (error) {
                             t.$message.error(error.error)
                         });
 
                 }
+            },
+            is_like(id) {
+                const t = this
+                this.$getItem(id).then(function (value) {
+                    if (value != null) {
+                        t.favour = Number(value)
+                    } else {
+                        t.favour = ''
+                    }
+
+                }).catch(function (err) {
+                    // eslint-disable-next-line no-console
+                    console.log(err);
+                });
             }
         }
     }

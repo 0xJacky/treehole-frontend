@@ -8,7 +8,7 @@
 			<span slot="datetime">{{moment(comment.created_at).fromNow()}}</span>
 			<span slot="actions">
           <a-tooltip title="踩">
-            <a-icon type="dislike" :theme="comment.favour == 0 ? 'filled' : 'outlined'" @click="dislikes(comment.id)"
+            <a-icon type="dislike" :theme="favour === 0 ? 'filled' : 'outlined'" @click="dislikes(comment.id)"
             />
           </a-tooltip>
           <span style="padding-left:3px;cursor: auto">
@@ -17,7 +17,7 @@
         </span>
 			<span slot="actions">
           <a-tooltip title="赞">
-            <a-icon type="like" :theme="comment.favour == 1 ? 'filled' : 'outlined'" @click="likes(comment.id)"
+            <a-icon type="like" :theme="favour === 1 ? 'filled' : 'outlined'" @click="likes(comment.id)"
             />
           </a-tooltip>
           <span style="padding-left: 3px;cursor: auto">
@@ -63,7 +63,8 @@
         data() {
             return {
                 reply: false,
-                moment
+                moment,
+                favour: ''
             }
         },
         computed: {
@@ -71,6 +72,9 @@
                 return this.$store.getters.is_login
             }
         },
+	    beforeMount() {
+            this.is_like(this.comment.id)
+	    },
         methods: {
             remove(id) {
                 this.$http.delete('/comment', {data: {id: id}})
@@ -95,12 +99,14 @@
             },
             likes() {
                 // eslint-disable-next-line eqeqeq
-                if (this.comment.favour != 1) {
+                if (this.favour != 1) {
                     const t = this
                     this.$http.post('/favour/like', {comment_id: this.comment.id})
                         .then((response) => {
-                            this.comment.favour = 1
+                            this.favour = 1
                             this.comment.likes = response.likes
+                            this.comment.dislikes = response.dislikes
+                            this.$setItem(this.comment.id, '1')
                         })
                         .catch(function (error) {
                             t.$message.error(error.error)
@@ -110,18 +116,34 @@
             },
             dislikes() {
                 // eslint-disable-next-line eqeqeq
-                if (this.comment.favour != 0) {
+                if (this.favour != 0) {
                     const t = this
                     this.$http.post('/favour/dislike', {comment_id: this.comment.id})
                         .then((response) => {
-                            this.comment.favour = 0
+                            this.favour = 0
                             this.comment.dislikes = response.dislikes
+                            this.comment.likes = response.likes
+                            this.$setItem(this.comment.id, '0')
                         })
                         .catch(function (error) {
                             t.$message.error(error.error)
                         });
 
                 }
+            },
+            is_like(id) {
+                const t = this
+                this.$getItem(id).then(function (value) {
+                    if (value != null) {
+                        t.favour = Number(value)
+                    } else {
+                        t.favour = ''
+                    }
+
+                }).catch(function (err) {
+                    // eslint-disable-next-line no-console
+                    console.log(err);
+                });
             }
         }
     }
