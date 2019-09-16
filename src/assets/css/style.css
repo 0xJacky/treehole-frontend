@@ -408,6 +408,11 @@ footer .row .col {
 }
 
 @media (max-width: 768px) {
+    .ant-modal {
+        width: 90% !important;
+        margin: 10px;
+    }
+
     .ant-menu-item, .ant-menu-submenu-title {
         padding: 0 16px;
     }

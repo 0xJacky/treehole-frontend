@@ -67,12 +67,13 @@
                 if (this.pwd) {
                     this.update.password = this.pwd
                 }
+                const t = this
                 this.$http.post('/user', this.update)
                     .then(() => {
                         this.$message.success('更新完成')
                     })
                     .catch(function (error) {
-                        this.$message.error(error.error)
+                        t.$message.error(error.error)
                     });
             }
         }

@@ -235,7 +235,7 @@
 <style scoped>
 	.upload-picture-btn {
 		font-size: 20px;
-		color: #1890ff;
+		color: #999999;
 	}
 
 	.vue-cropper {

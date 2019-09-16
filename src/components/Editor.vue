@@ -31,6 +31,7 @@
 					:loading="loading"
 					type="primary"
 					@click="store()"
+					ghost
 			>
 				发布
 			</a-button>
@@ -161,6 +162,10 @@
 </script>
 
 <style scoped>
+	.editor {
+		padding: 10px;
+	}
+
 	.editor .select-category {
 		padding: 10px 0;
 		float: left;

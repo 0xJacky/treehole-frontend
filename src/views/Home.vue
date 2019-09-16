@@ -5,6 +5,15 @@
 			<p>Write your story</p>
 		</div>
 
+		<a-alert
+				v-if="notice"
+				message="公告"
+				:description="notice"
+				type="info"
+				showIcon
+				closeText="关闭"
+		/>
+
 		<editor :categories="categories" @get_list="get_list"/>
 
 		<a-menu
@@ -84,7 +93,8 @@
                 current_page: '',
                 current: ['0'],
                 visible: false,
-                post_id: null
+                post_id: null,
+                notice: ''
             }
         },
         beforeMount() {
@@ -124,6 +134,7 @@
                 this.$http.get('/frontend/home')
                     .then((response) => {
                         this.categories = response.categories
+                        this.notice = response.notice
                         this.handle_response(response.posts)
                     })
                     .catch(function (error) {
@@ -133,6 +144,9 @@
         }
     }
 </script>
-<style scoped>
 
+<style scoped>
+	.ant-alert.ant-alert-closable {
+		margin: 10px;
+	}
 </style>
