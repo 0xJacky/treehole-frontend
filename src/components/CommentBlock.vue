@@ -49,9 +49,20 @@
 <script>
     import Editor from "./Editor"
     import moment from 'moment'
+    import Vue from 'vue'
+    import {VueReCaptcha} from 'vue-recaptcha-v3'
+
+    const uuidv4 = require('uuid/v4');
 
     require('moment/locale/zh-cn')
     moment.locale('zh-cn')
+
+    Vue.use(VueReCaptcha, {
+        siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
+        loaderOptions: {
+            useRecaptchaNet: true
+        }
+    })
 
     export default {
         name: "CommentBlock",
@@ -72,9 +83,9 @@
                 return this.$store.getters.is_login
             }
         },
-	    beforeMount() {
+        beforeMount() {
             this.is_like(this.comment.id)
-	    },
+        },
         methods: {
             remove(id) {
                 this.$http.delete('/comment', {data: {id: id}})
@@ -101,16 +112,25 @@
                 // eslint-disable-next-line eqeqeq
                 if (this.favour != 1) {
                     const t = this
-                    this.$http.post('/favour/like', {comment_id: this.comment.id})
-                        .then((response) => {
-                            this.favour = 1
-                            this.comment.likes = response.likes
-                            this.comment.dislikes = response.dislikes
-                            this.$setItem(this.comment.id, '1')
+                    this.comment.likes++
+                    this.$recaptchaLoaded().then(() => {
+                        this.$recaptcha('/favour/like').then((token) => {
+                            this.$http.post('/favour/like', {
+                                comment_id: this.comment.id,
+                                o: this.favour === 0 ? uuidv4() : '',
+                                token: token
+                            })
+                                .then((response) => {
+                                    this.favour = 1
+                                    this.comment.likes = response.likes
+                                    this.comment.dislikes = response.dislikes
+                                    this.$setItem(this.comment.id, '1')
+                                })
+                                .catch(function (error) {
+                                    t.$message.error(error.error)
+                                });
                         })
-                        .catch(function (error) {
-                            t.$message.error(error.error)
-                        });
+                    })
 
                 }
             },
@@ -118,16 +138,25 @@
                 // eslint-disable-next-line eqeqeq
                 if (this.favour != 0) {
                     const t = this
-                    this.$http.post('/favour/dislike', {comment_id: this.comment.id})
-                        .then((response) => {
-                            this.favour = 0
-                            this.comment.dislikes = response.dislikes
-                            this.comment.likes = response.likes
-                            this.$setItem(this.comment.id, '0')
+                    this.comment.dislikes++
+                    this.$recaptchaLoaded().then(() => {
+                        this.$recaptcha('/favour/dislike').then((token) => {
+                            this.$http.post('/favour/dislike', {
+                                comment_id: this.comment.id,
+                                o: this.favour === 1 ? uuidv4() : '',
+                                token: token
+                            })
+                                .then((response) => {
+                                    this.favour = 0
+                                    this.comment.dislikes = response.dislikes
+                                    this.comment.likes = response.likes
+                                    this.$setItem(this.comment.id, '0')
+                                })
+                                .catch(function (error) {
+                                    t.$message.error(error.error)
+                                });
                         })
-                        .catch(function (error) {
-                            t.$message.error(error.error)
-                        });
+                    })
 
                 }
             },

@@ -121,6 +121,12 @@
     .login .login-panel label {
         color: #f5f5f5;
     }
+
+    .ant-comment-actions > li,
+    .ant-comment-actions > li > span,
+    .ant-modal {
+        color: #f5f5f5;
+    }
 }
 
 

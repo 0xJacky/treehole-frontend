@@ -60,6 +60,7 @@
     import {VueReCaptcha} from 'vue-recaptcha-v3'
     import VueLocalForage from 'vue-localforage'
     import localforage from 'localforage'
+
     const uuidv4 = require('uuid/v4');
 
     Vue.use(VueLocalForage)
@@ -157,33 +158,50 @@
                 // eslint-disable-next-line eqeqeq
                 if (this.favour != 1) {
                     const t = this
-                    this.$http.post('/favour/like', {post_id: this.post.id, o:this.favour === 0 ? uuidv4() : ''})
-                        .then((response) => {
-                            this.favour = 1
-                            this.post.likes = response.likes
-                            this.post.dislikes = response.dislikes
-                            this.$setItem(this.post.id, '1')
+                    this.post.likes++
+                    this.$recaptchaLoaded().then(() => {
+                        this.$recaptcha('/favour/like').then((token) => {
+                            this.$http.post('/favour/like', {
+                                post_id: this.post.id,
+                                o: this.favour === 0 ? uuidv4() : '',
+                                token: token
+                            })
+                                .then((response) => {
+                                    this.favour = 1
+                                    this.post.likes = response.likes
+                                    this.post.dislikes = response.dislikes
+                                    this.$setItem(this.post.id, '1')
+                                })
+                                .catch(function (error) {
+                                    t.$message.error(error.error)
+                                });
                         })
-                        .catch(function (error) {
-                            t.$message.error(error.error)
-                        });
-
+                    })
                 }
             },
             dislikes() {
                 // eslint-disable-next-line eqeqeq
                 if (this.favour != 0) {
                     const t = this
-                    this.$http.post('/favour/dislike', {post_id: this.post.id, o:this.favour === 1 ? uuidv4() : ''})
-                        .then((response) => {
-                            this.favour = 0
-                            this.post.dislikes = response.dislikes
-                            this.post.likes = response.likes
-                            this.$setItem(this.post.id, '0')
+                    this.post.dislikes++
+                    this.$recaptchaLoaded().then(() => {
+                        this.$recaptcha('/favour/dislike').then((token) => {
+                            this.$http.post('/favour/dislike', {
+                                post_id: this.post.id,
+                                o: this.favour === 1 ? uuidv4() : '',
+                                token: token
+                            })
+                                .then((response) => {
+                                    this.favour = 0
+                                    this.post.dislikes = response.dislikes
+                                    this.post.likes = response.likes
+                                    this.$setItem(this.post.id, '0')
+                                })
+                                .catch(function (error) {
+                                    t.$message.error(error.error)
+                                });
                         })
-                        .catch(function (error) {
-                            t.$message.error(error.error)
-                        });
+                    })
 
                 }
             },
@@ -219,6 +237,7 @@
 	.favour .action {
 		padding: 10px;
 	}
+
 	@media (prefers-color-scheme: dark) {
 		.post-content {
 			color: #fff;
