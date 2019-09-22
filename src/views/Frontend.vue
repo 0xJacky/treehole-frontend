@@ -75,7 +75,7 @@
 						<a
 								href="https://jackyu.cn/"
 								target="_blank"
-						>Power By uSilo · Designed by OxJacky</a>
+						>Power by uSilo</a>
 					</div>
 				</a-col>
 			</a-row>

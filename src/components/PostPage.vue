@@ -42,7 +42,7 @@
 			<span class="created-at">{{ moment(post.created_at).fromNow() }}</span>
 		</div>
 		<a-divider/>
-		<p>评论</p>
+		<p class="comment-label">评论</p>
 		<editor :post_id="post.id"/>
 		<comment-block
 				v-for="root in post.comments.root"
@@ -218,5 +218,18 @@
 
 	.favour .action {
 		padding: 10px;
+	}
+	@media (prefers-color-scheme: dark) {
+		.post-content {
+			color: #fff;
+		}
+
+		.comment-label {
+			color: #fff;
+		}
+
+		.favour .action {
+			color: #fff;
+		}
 	}
 </style>

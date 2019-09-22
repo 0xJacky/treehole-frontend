@@ -73,16 +73,24 @@
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 7;
 	}
+
 	.ant-card-cover {
 		overflow: hidden;
 		width: 100%;
 		height: 120px;
 	}
+
 	.ant-card-cover img {
 		border-radius: 10px 10px 0 0;
 		width: 100%;
 		height: 120px;
 		object-fit: cover;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.post-content {
+			color: #fff;
+		}
 	}
 
 </style>

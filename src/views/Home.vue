@@ -41,7 +41,7 @@
 					:xxl="8"
 					class="post-card"
 			>
-				<post-card :post="post" @get_list="get_list" @show_modal="visible=true; post_id=post.id"/>
+				<post-card :post="post" @get_list="get_list" @show_modal="visible=true;post_id=post.id"/>
 			</a-col>
 		</a-row>
 
@@ -72,8 +72,8 @@
 <script>
     // @ is an alias to /src
     import Editor from '@/components/Editor.vue'
-    import PostCard from "../components/PostCard"
-    import PostPage from "../components/PostPage";
+    import PostCard from "@/components/PostCard"
+    import PostPage from "@/components/PostPage"
 
     export default {
         name: 'home',

@@ -1,7 +1,7 @@
 <template>
 	<div class="manage-category">
 		<h2>分类</h2>
-		<a-button @click="create">创建分类</a-button>
+		<a-button @click="create" style="margin: 5px 0">创建分类</a-button>
 		<div class="input-area" v-show="show_editor">
 			<a-input v-model="update.name"/>
 			<a-button type="primary" @click="store">保存</a-button>

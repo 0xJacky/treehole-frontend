@@ -150,6 +150,7 @@
                                 })
                                 .catch((error) => {
                                     this.$message.error('发布失败 ' + error.data.message)
+                                    this.loading = false
                                     // eslint-disable-next-line no-console
                                     console.log(error)
                                 });
