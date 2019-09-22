@@ -12,7 +12,7 @@
 						class="limit-max">
         <span class="title">
           <router-link to="/home">
-            uStory
+            uSilo
           </router-link>
         </span>
 					<a-menu
@@ -75,7 +75,7 @@
 						<a
 								href="https://jackyu.cn/"
 								target="_blank"
-						>Power By Treehole · Designed by OxJacky</a>
+						>Power By uSilo · Designed by OxJacky</a>
 					</div>
 				</a-col>
 			</a-row>

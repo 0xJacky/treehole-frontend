@@ -2,7 +2,7 @@ const webpack = require('webpack');
 
 module.exports = {
   devServer: {
-    proxy: 'https://treehole.app'
+    proxy: 'https://usilo.app'
   },
 
   productionSourceMap: false,
