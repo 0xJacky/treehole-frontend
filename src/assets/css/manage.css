@@ -1,0 +1,122 @@
+/* Copyright 2019 0xJacky */
+body {
+    background: #fcfcfc;
+}
+
+p {
+    padding: 0 0 10px 0;
+}
+
+.manage-container {
+    height: 100%;
+}
+
+.manage-container .sidebar {
+    height: 100%;
+    background-color: #ffffff;
+    border-right: 1px solid #e8e8e8;
+    position: fixed;
+}
+
+.manage-container .sidebar .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected, .ant-menu-item:active {
+    background-color: unset;
+}
+
+.manage-container .sidebar .ant-menu-inline {
+    border-right: unset;
+}
+
+.manage-container .sidebar .avatar {
+    padding: 30px 30px 10px 30px;
+}
+
+.manage-container .sidebar .avatar .info {
+
+}
+
+.manage-container .sidebar .avatar .info .username {
+    padding: 0 0 0 20px;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.manage-container .content {
+    padding: 0;
+    position: absolute;
+    right: 0;
+}
+
+.manage-container .content .home .stat {
+    margin: 10px;
+}
+
+.manage-container .content .home .stat h1 {
+    font-weight: 200;
+}
+
+.manage-container .content .article_editor .ant-card-body {
+    padding: 0;
+}
+
+.content .view {
+    margin: 20px 10px 0 10px;
+}
+
+.manage-container .sidebar .collapse_button {
+    padding: 20px;
+}
+
+.manage-container .content .ant-pagination {
+    float: right;
+    padding: 15px 0 0 0;
+}
+
+.manage-container .content .form-control .ant-select {
+    min-width: 150px;
+}
+
+footer {
+
+}
+
+.manage-container .content .editor {
+    margin: 0 0 30px 0;
+
+}
+
+.manage-container .content .editor .form-control {
+    margin: 10px;
+    max-width: 300px;
+}
+
+.manage-container .content .editor .form-control input {
+
+}
+
+.manage-container .content .editor_button {
+    float: right;
+}
+
+.manage-container .content .editor_button button {
+    margin: 15px 0 0 15px;
+}
+
+@media (max-width: 768px) {
+    .manage-container .sidebar {
+        width: auto
+    }
+
+    .manage-container .sidebar .ant-menu-inline-collapsed {
+        border-right: unset;
+    }
+
+    .manage-container .sidebar .avatar {
+        padding: 18px 18px 0 18px;
+    }
+}
+
+@media (max-width: 992px) {
+    .manage-container .sidebar .avatar .info {
+        display: none;
+    }
+}

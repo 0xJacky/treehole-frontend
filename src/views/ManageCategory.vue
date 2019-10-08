@@ -1,5 +1,5 @@
 <template>
-	<div class="manage-category">
+	<a-card class="manage-category">
 		<h2>分类</h2>
 		<a-button @click="create" style="margin: 5px 0">创建分类</a-button>
 		<div class="input-area" v-show="show_editor">
@@ -26,7 +26,7 @@
 				</a-popconfirm>
 			</template>
 		</a-table>
-	</div>
+	</a-card>
 </template>
 
 <script>

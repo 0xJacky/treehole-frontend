@@ -16,47 +16,65 @@ const router = new Router({
                     component: () => import('./views/Home.vue')
                 },
                 {
-                    path: '/about',
-                    name: 'about',
-                    component: () => import('./views/About.vue')
+                    path: '/post/:id',
+                    name:
+                        'post',
+                    component:
+                        () => import('./views/Post.vue')
                 },
                 {
-                    path: '/admin',
-                    redirect: '/admin/home',
-                    component: () => import('./views/Manage.vue'),
+                    path: '/category/:category_id',
+                    name: 'category',
+                    component: () => import('./views/Home.vue')
+                },
+                {
+                    path: '/write',
+                    name: 'write',
+                    component: () => import('./views/Write.vue')
+                },
+                {
+                    path: '/about',
+                    name:
+                        'about',
+                    component: () => import('./views/About.vue')
+                },
+            ]
+        },
+        {
+            path: '/admin',
+            redirect: '/admin/home',
+            component: () => import('./views/Manage.vue'),
+            meta: {requiresAuth: true},
+            children: [
+                {
+                    path: 'home',
+                    name: '管理中心',
+                    component: () => import('./views/ManageCategory.vue'),
                     meta: {requiresAuth: true},
-                    children: [
-                        {
-                            path: 'home',
-                            name: '管理中心',
-                            component: () => import('./views/ManageCategory.vue'),
-                            meta: {requiresAuth: true},
-                        },
-                        {
-                            path: 'category',
-                            name: '管理分类',
-                            component: () => import('./views/ManageCategory.vue'),
-                            meta: {requiresAuth: true},
-                        },
-                        {
-                            path: 'report',
-                            name: '管理举报',
-                            component: () => import('./views/ManageReport.vue'),
-                            meta: {requiresAuth: true},
-                        },
-                        {
-                            path: 'me',
-                            name: '个人设置',
-                            component: () => import('./views/ManageMe.vue'),
-                            meta: {requiresAuth: true},
-                        },
-                        {
-                            path: 'settings',
-                            name: '全局设置',
-                            component: () => import('./views/ManageSettings.vue'),
-                            meta: {requiresAuth: true},
-                        },
-                    ]
+                },
+                {
+                    path: 'category',
+                    name: '管理分类',
+                    component: () => import('./views/ManageCategory.vue'),
+                    meta: {requiresAuth: true},
+                },
+                {
+                    path: 'report',
+                    name: '管理举报',
+                    component: () => import('./views/ManageReport.vue'),
+                    meta: {requiresAuth: true},
+                },
+                {
+                    path: 'me',
+                    name: '个人设置',
+                    component: () => import('./views/ManageMe.vue'),
+                    meta: {requiresAuth: true},
+                },
+                {
+                    path: 'settings',
+                    name: '全局设置',
+                    component: () => import('./views/ManageSettings.vue'),
+                    meta: {requiresAuth: true},
                 },
             ]
         },

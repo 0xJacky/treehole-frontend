@@ -1,5 +1,6 @@
 <template>
-	<div>
+	<a-card>
+		<h2>全局设置</h2>
 		<div class="form-control">
 			<label>公告</label>
 			<a-textarea v-model="update.notice"/>
@@ -7,7 +8,7 @@
 		<div class="form-control submit-button">
 			<a-button type="primary" @click="store">保存</a-button>
 		</div>
-	</div>
+	</a-card>
 </template>
 
 <script>

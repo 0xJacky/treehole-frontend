@@ -1,62 +1,33 @@
 <template>
-	<div>
-		<a-comment>
-			<p slot="content">{{ comment.content }}</p>
-			<div slot="content" class="post-img" v-if="comment.upload_id">
-				<img :src="comment.upload.url"/>
-			</div>
-			<span slot="datetime">{{moment(comment.created_at).fromNow()}}</span>
-			<span slot="actions">
+	<div class="favour center">
+        <span class="action">
           <a-tooltip title="踩">
-            <a-icon type="dislike" :theme="favour === 0 ? 'filled' : 'outlined'" @click="dislikes(comment.id)"
+            <a-icon type="dislike" :theme="favour === 0 ? 'filled' : 'outlined'" @click="dislikes(post.id)"
             />
           </a-tooltip>
-          <span style="padding-left:3px;cursor: auto">
-            {{ comment.dislikes }}
+          <span style="padding-left:3px">
+            {{ post.dislikes }}
           </span>
         </span>
-			<span slot="actions">
+		<span class="action">
           <a-tooltip title="赞">
-            <a-icon type="like" :theme="favour === 1 ? 'filled' : 'outlined'" @click="likes(comment.id)"
+            <a-icon type="like" :theme="favour === 1 ? 'filled' : 'outlined'" @click="likes(post.id)"
             />
           </a-tooltip>
-          <span style="padding-left: 3px;cursor: auto">
-            {{ comment.likes }}
+          <span style="padding-left: 3px">
+            {{ post.likes }}
           </span>
-            </span>
-			<span slot="actions" @click="reply=true">回复</span>
-			<a-popconfirm
-					slot="actions"
-					v-if="is_login"
-					title="你确定要删除这条动态?"
-					@confirm="remove(comment.id)" okText="是的"
-					cancelText="再想想">
-				<span href="#">删除</span>
-			</a-popconfirm>
-			<a-popconfirm
-					slot="actions"
-					title="你确定要举报这条动态?"
-					@confirm="report(comment.id)" okText="是的"
-					cancelText="再想想">
-				<span href="#">举报</span>
-			</a-popconfirm>
-			<editor v-if="reply" :post_id="comment.post_id" :parent="comment.id" @ok="reply=false"/>
-			<comment-block v-for="child in comments[comment.id]" :key="child.id" :comment="child" :comments="comments"/>
-		</a-comment>
+        </span>
 	</div>
 </template>
 
 <script>
-    import Editor from "./Editor"
-    import moment from 'moment'
     import Vue from 'vue'
     import {VueReCaptcha} from 'vue-recaptcha-v3'
+    import VueLocalForage from 'vue-localforage'
+    import localforage from 'localforage'
 
-    const uuidv4 = require('uuid/v4');
-
-    require('moment/locale/zh-cn')
-    moment.locale('zh-cn')
-
+    Vue.use(VueLocalForage)
     Vue.use(VueReCaptcha, {
         siteKey: process.env.VUE_APP_RECAPTCHA_SITEKEY,
         loaderOptions: {
@@ -65,59 +36,50 @@
     })
 
     export default {
-        name: "CommentBlock",
-        components: {Editor},
+        name: "Favour",
         props: {
-            comments: [Object, Array],
-            comment: [Object, Array]
+            likes_Number: Number,
+            dislikes_Number: Number,
+            id: String,
+            type: {
+                validator: function (value) {
+                    return ['post', 'comment'].indexOf(value) !== -1
+                }
+            }
         },
         data() {
             return {
-                reply: false,
-                moment,
+                post: {
+                    id: this.id,
+                    likes: this.likes_Number,
+                    dislikes: this.dislikes_Number
+                },
                 favour: '',
                 rollback: false,
                 lock: false
             }
         },
-        computed: {
-            is_login() {
-                return this.$store.getters.is_login
+        mounted() {
+            this.$setStorageDriver(localforage.LOCALSTORAGE)
+            this.is_like(this.id)
+        },
+        watch: {
+            id() {
+                this.post.id = this.id
+                this.post.likes = this.likes_Number
+                this.post.dislikes = this.dislikes_Number
+                this.is_like(this.id)
             }
         },
-        beforeMount() {
-            this.is_like(this.comment.id)
-        },
         methods: {
-            remove(id) {
-                this.$http.delete('/comment', {data: {id: id}})
-                    .then(() => {
-                        this.$message.success('删除成功')
-                        this.$store.dispatch('reload_comment')
-                    })
-                    .catch((error) => {
-                        // eslint-disable-next-line no-console
-                        console.log(error)
-                    })
-            },
-            report(id) {
-                const t = this
-                this.$http.post('/report', {comment_id: id})
-                    .then(() => {
-                        this.$message.success('举报成功')
-                    })
-                    .catch(function (error) {
-                        t.$message.error(error.error)
-                    });
-            },
             likes() {
                 // eslint-disable-next-line eqeqeq
                 if (this.favour != 1 && !this.lock) {
                     this.lock = true
                     const t = this
                     this.favour = 1
-                    this.comment.likes++
-                    this.$getItem(this.comment.id).then(function (value) {
+                    this.post.likes++
+                    this.$getItem(this.post.id).then(function (value) {
                         if (value != null && Number(value) === 0) {
                             t.rollback = true
                         } else {
@@ -131,15 +93,15 @@
                     this.$recaptchaLoaded().then(() => {
                         this.$recaptcha('/favour/like').then((token) => {
                             let update = {
-                                comment_id: this.comment.id,
                                 rollback: this.rollback,
                                 token: token
                             }
+                            update[this.type === 'post' ? 'post_id' : 'comment_id'] = this.post.id
                             this.$http.post('/favour/like', update)
                                 .then((response) => {
-                                    this.comment.likes = response.likes
-                                    this.comment.dislikes = response.dislikes
-                                    this.$setItem(this.comment.id, '1')
+                                    this.post.likes = response.likes
+                                    this.post.dislikes = response.dislikes
+                                    this.$setItem(this.post.id, '1')
                                     if (this.rollback) {
                                         this.$message.success('点赞数据同步成功')
                                     }
@@ -161,8 +123,8 @@
                     this.lock = true
                     const t = this
                     this.favour = 0
-                    this.comment.dislikes++
-                    this.$getItem(this.comment.id).then(function (value) {
+                    this.post.dislikes++
+                    this.$getItem(this.post.id).then(function (value) {
                         if (value != null && Number(value) === 1) {
                             t.rollback = true
                         } else {
@@ -176,14 +138,14 @@
                     this.$recaptchaLoaded().then(() => {
                         this.$recaptcha('/favour/dislike').then((token) => {
                             let update = {
-                                comment_id: this.comment.id,
                                 rollback: this.rollback,
                                 token: token
                             }
+                            update[this.type === 'post' ? 'post_id' : 'comment_id'] = this.post.id
                             this.$http.post('/favour/dislike', update)
                                 .then((response) => {
-                                    this.comment.dislikes = response.dislikes
-                                    this.comment.likes = response.likes
+                                    this.post.dislikes = response.dislikes
+                                    this.post.likes = response.likes
                                     this.$setItem(this.post.id, '0')
                                     if (this.rollback) {
                                         this.$message.success('点赞数据同步成功')
@@ -220,7 +182,16 @@
 </script>
 
 <style scoped>
-	.post-img img {
-		width: 50%;
+	.favour .action {
+		padding: 10px;
+		cursor: pointer
 	}
+
+	@media (prefers-color-scheme: dark) {
+		.favour .action {
+			color: #fff;
+		}
+	}
+
+
 </style>

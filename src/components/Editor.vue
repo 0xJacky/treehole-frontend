@@ -3,7 +3,7 @@
 		<a-textarea
 				v-model="update.content"
 				maxlength="200"
-				placeholder="有什么想告诉树洞的"
+				placeholder="有什么想告诉语闲的"
 				:row="2"
 				:autosize="{ minRows: 2, maxRows: 3 }"
 		/>

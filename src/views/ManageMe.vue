@@ -1,5 +1,6 @@
 <template>
-	<div>
+	<a-card>
+		<h2>个人设置</h2>
 		<a-row>
 			<a-col
 					:xs="24"
@@ -41,7 +42,7 @@
 		<div class="form-control submit-button">
 			<a-button type="primary" @click="store">保存</a-button>
 		</div>
-	</div>
+	</a-card>
 </template>
 
 <script>

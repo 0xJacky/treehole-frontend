@@ -14,47 +14,37 @@
 				closeText="关闭"
 		/>
 
-		<editor :categories="categories" @get_list="get_list"/>
-
 		<a-menu
 				v-model="current"
 				mode="horizontal"
 				class="categories-menu center"
 		>
 			<a-menu-item key="0">
-				最新
+				<router-link to="/home">
+					最新
+				</router-link>
 			</a-menu-item>
+
 			<a-menu-item v-for="category in categories" :key="category.id">
-				{{ category.name }}
+				<router-link :to="'/category/'+category.id">
+					{{ category.name }}
+				</router-link>
 			</a-menu-item>
 		</a-menu>
 
-		<a-row>
-			<a-col
-					v-for="post in posts"
-					:key="post.id"
-					:xs="24"
-					:sm="24"
-					:md="12"
-					:lg="8"
-					:xl="8"
-					:xxl="8"
-					class="post-card"
-			>
-				<post-card :post="post" @get_list="get_list" @show_modal="visible=true;post_id=post.id"/>
-			</a-col>
-		</a-row>
+		<router-view/>
 
-		<a-modal
-				title="查看语闲"
-				:visible="visible"
-				:closable="true"
-				:centered="true"
-				:footer="null"
-				@cancel="visible=false"
-		>
-			<post-page :id="post_id"></post-page>
-		</a-modal>
+		<a-timeline mode="alternate">
+			<a-timeline-item style="width: 89%; margin: 0 auto"
+					v-for="post in posts"
+					:key="post.id">
+				<router-link :to="'/post/'+post.id" class="no_hover">
+					<post-card :post="post" @get_list="get_list"/>
+				</router-link>
+			</a-timeline-item>
+		</a-timeline>
+
+		<p v-if="posts.length==0" class="center">空空如也</p>
 
 		<a-pagination
 				v-if="last_page > 1"
@@ -71,16 +61,12 @@
 
 <script>
     // @ is an alias to /src
-    import Editor from '@/components/Editor.vue'
     import PostCard from "@/components/PostCard"
-    import PostPage from "@/components/PostPage"
 
     export default {
         name: 'home',
         components: {
-            PostPage,
-            PostCard,
-            Editor
+            PostCard
         },
         data() {
             return {
@@ -91,14 +77,17 @@
                 total: 1,
                 last_page: 1,
                 current_page: '',
-                current: ['0'],
-                visible: false,
+                current: [this.$route.params.category_id ? this.$route.params.category_id : '0'],
                 post_id: null,
                 notice: ''
             }
         },
         beforeMount() {
-            this.init()
+            if (this.$route.params.category_id) {
+                this.get_list()
+            } else {
+                this.init()
+            }
         },
         computed: {
             is_login() {
@@ -106,7 +95,7 @@
             }
         },
         watch: {
-            current() {
+            '$route'() {
                 this.get_list()
             }
         },
@@ -121,10 +110,15 @@
             },
             get_list(pageNum = 1) {
                 const t = this
-                const category = this.current[0] != 0 ? '&category=' + this.current[0] : ''
-                this.$http.get('/post/list?page=' + pageNum + category)
+                const category = this.$route.params.category_id ? '&category=' + this.$route.params.category_id : ''
+                const init = this.categories.length == 0 ? '&init=true' : ''
+                this.$http.get('/post/list?page=' + pageNum + category + init)
                     .then((response) => {
-                        this.handle_response(response)
+                        this.handle_response(response.posts)
+                        if (this.categories.length == 0) {
+                            this.categories = response.categories
+                            this.notice = response.notice
+                        }
                     })
                     .catch(function (error) {
                         t.$message.error(error.error)
@@ -148,5 +142,17 @@
 <style scoped>
 	.ant-alert.ant-alert-closable {
 		margin: 10px;
+	}
+
+	.no_hover:hover {
+		color: unset;
+	}
+
+	.ant-timeline-item-right .card {
+		margin: 0 0 10px 20px;
+	}
+
+	.ant-timeline-item-left .card {
+		margin: 0 20px 10px 0;
 	}
 </style>

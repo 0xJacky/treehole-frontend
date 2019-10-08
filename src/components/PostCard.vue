@@ -1,29 +1,27 @@
 <template>
-	<a @click="$emit('show_modal')">
-		<a-card
-				class="card"
-				:bordered="false"
-				hoverable>
-			<img
-					v-if="post.upload_id"
-					alt="example"
-					:src="post.upload.url"
-					slot="cover"
-			/>
-			<p class="post-content">{{ post.content }}</p>
-			<div class="post-info">
-				<a-popconfirm
-						v-if="is_login"
-						title="你确定要删除这条动态?"
-						@confirm="remove(post.id)" okText="是的"
-						cancelText="再想想">
-					<a href="#">删除</a> ·
-				</a-popconfirm>
-				<span class="category">{{ post.category.name }}</span> ·
-				<span class="created-at">{{ moment(post.created_at).fromNow() }}</span>
-			</div>
-		</a-card>
-	</a>
+	<a-card
+			class="card"
+			:bordered="false"
+	>
+		<img
+				v-if="post.upload_id"
+				alt="example"
+				:src="post.upload.url"
+				slot="cover"
+		/>
+		<p class="post-content">{{ post.content }}</p>
+		<div class="post-info">
+			<a-popconfirm
+					v-if="is_login"
+					title="你确定要删除这条动态?"
+					@confirm="remove(post.id)" okText="是的"
+					cancelText="再想想">
+				<a href="#">删除</a> ·
+			</a-popconfirm>
+			<span class="category">{{ post.category.name }} · </span>
+			<span class="created-at">{{ moment(post.created_at).fromNow() }}</span>
+		</div>
+	</a-card>
 </template>
 
 <script>
@@ -64,6 +62,10 @@
 </script>
 
 <style scoped>
+	.card {
+		cursor: pointer;
+	}
+
 	.post-content {
 		white-space: pre-wrap;
 		margin: 0 0 10px 0;
@@ -72,19 +74,6 @@
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 7;
-	}
-
-	.ant-card-cover {
-		overflow: hidden;
-		width: 100%;
-		height: 120px;
-	}
-
-	.ant-card-cover img {
-		border-radius: 10px 10px 0 0;
-		width: 100%;
-		height: 120px;
-		object-fit: cover;
 	}
 
 	@media (prefers-color-scheme: dark) {

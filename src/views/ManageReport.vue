@@ -1,5 +1,6 @@
 <template>
-	<div>
+	<a-card>
+		<h2>管理举报</h2>
 		<a-button type="link" @click="status = 0">未处理</a-button>
 		<a-button type="link" @click="status = 1">已处理</a-button>
 		<a-table
@@ -18,7 +19,7 @@
 					slot="content"
 					slot-scope="text, record"
 			>
-				{{ record.post_id ? '语闲: '+ (record.post.content.length > 25 ? record.post.content.substring(0,24)+'...'
+				{{ record.post_id ? '动态: '+ (record.post.content.length > 25 ? record.post.content.substring(0,24)+'...'
 				:
 				record.post.content) : '评论: '+(record.comment.content.length > 25 ?
 				record.comment.content.substring(0,24)+'...' : record.comment.content) }}
@@ -57,7 +58,7 @@
 				class="pagination center"
 				@change="get_list"
 		/>
-	</div>
+	</a-card>
 </template>
 
 <script>

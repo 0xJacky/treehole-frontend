@@ -21,7 +21,8 @@
 						@submit="handleSubmit"
 				>
 					<div class="welcome">
-						<h1>管理系统</h1>
+						<h1>uSilo</h1>
+						<p style="text-align: center">语闲管理系统</p>
 					</div>
 					<a-form-item>
 						<label>邮箱</label>

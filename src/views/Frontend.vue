@@ -28,6 +28,11 @@
 								首页
 							</router-link>
 						</a-menu-item>
+						<a-menu-item key="/write">
+							<router-link to="/write">
+								写动态
+							</router-link>
+						</a-menu-item>
 						<a-menu-item key="/about">
 							<router-link to="/about">
 								关于
@@ -52,6 +57,13 @@
 					:xxl="16"
 					class="limit-max"
 			>
+				<vue-particles
+						color="#dedede"
+						:particlesNumber="60"
+						:move-speed="3"
+						:click-effect="false"
+						:hover-effect="false"
+						class="particles"></vue-particles>
 				<router-view @init="init"/>
 			</a-col>
 		</a-row>
@@ -75,6 +87,12 @@
 						<a
 								href="https://jackyu.cn/"
 								target="_blank"
+						>© uSilo 2019</a>
+					</div>
+					<div>
+						<a
+								href="https://jackyu.cn/"
+								target="_blank"
 						>Power by uSilo</a>
 					</div>
 				</a-col>
@@ -84,6 +102,11 @@
 </template>
 
 <script>
+    import Vue from 'vue'
+    import VueParticles from 'vue-particles'
+
+    Vue.use(VueParticles)
+
     export default {
         name: 'Frontend',
         data() {
@@ -119,7 +142,11 @@
 		border-bottom: unset;
 	}
 
-	.ant-modal-mask {
-		z-index: 1002;
+	.particles {
+		position: fixed;
+		z-index: -1;
+		left: 0;
+		width: 100%;
+		height: 100%;
 	}
 </style>
