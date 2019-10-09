@@ -73,7 +73,7 @@
 		overflow: hidden;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 7;
+		-webkit-line-clamp: 8;
 	}
 
 	@media (prefers-color-scheme: dark) {

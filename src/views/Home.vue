@@ -47,7 +47,7 @@
 			<a-icon slot="indicator" type="loading" style="font-size: 24px" spin/>
 		</a-spin>
 
-		<p v-if="posts.length==0 && !loading" class="center">空空如也</p>
+		<p v-if="posts.length==0 && !loading" class="center auto-dark">空空如也</p>
 
 		<a-pagination
 				v-if="last_page > 1"

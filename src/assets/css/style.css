@@ -37,6 +37,20 @@
         border-color: #FFFFFF;
     }
 
+    .ant-btn, .ant-btn:hover, .ant-btn:active, .ant-btn:focus {
+        background: transparent;
+        color: #fcfcfc;
+    }
+
+    .ant-popover-inner {
+        background: var(--background-color);
+        border: 1px solid #FFFFFF;
+    }
+
+    .ant-popover-inner .ant-popover-message-title {
+        color: #fcfcfc;
+    }
+
     .ant-menu-horizontal > .ant-menu-item-selected > a {
         color: #FFFFFF;
     }
@@ -66,6 +80,22 @@
     .ant-table-thead > tr > th {
         background: transparent;
         color: #fcfcfc;
+    }
+
+    .ant-comment p {
+        color: #f5f5f5;
+    }
+
+    .meta span {
+        color: #f5f5f5;
+    }
+
+    .auto-dark {
+        color: #fcfcfc;
+    }
+
+    .welcome p {
+        color: #f5f5f5;
     }
 
     .ant-card-head-title {
@@ -133,6 +163,10 @@
     .ant-modal {
         color: #f5f5f5;
     }
+}
+
+textarea.ant-input {
+    background: transparent;
 }
 
 a {
@@ -664,7 +698,7 @@ footer .row .col {
     }
 
     .card, .ant-card, .card .ant-card-cover img {
-        border-radius: unset!important;
+        border-radius: unset !important;
     }
 
     .login .wrapper {

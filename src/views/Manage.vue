@@ -136,6 +136,7 @@
         },
         methods: {
             logout() {
+                const t = this
                 this.$http.delete('/authorizations/current')
                     .then(() => {
                         this.$store.dispatch('logout')
@@ -145,6 +146,8 @@
                     .catch((error) => {
                         // eslint-disable-next-line no-console
                         console.log(error)
+                        t.$store.dispatch('logout')
+                        t.$router.push('/home')
                     })
             },
             onOpenChange(openKeys) {
