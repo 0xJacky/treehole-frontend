@@ -3,8 +3,14 @@
 		<h2>分类</h2>
 		<a-button @click="create" style="margin: 5px 0">创建分类</a-button>
 		<div class="input-area" v-show="show_editor">
+			<label>名称</label>
 			<a-input v-model="update.name"/>
+
+			<label>优先级</label>
+			<a-input v-model="update.order"/>
+
 			<a-button type="primary" @click="store">保存</a-button>
+			<a-button @click="show_editor=false">取消</a-button>
 		</div>
 		<a-table
 				:columns="columns"
@@ -16,7 +22,7 @@
 					slot="action"
 					slot-scope="text, record"
 			>
-				<a href="#" @click="edit(record.id, record.name)">编辑</a>
+				<a href="javascript:;" @click="edit(record.id, record.name, record.order)">编辑</a>
 				<a-divider type="vertical"/>
 				<a-popconfirm
 						title="你确定要删除?"
@@ -34,6 +40,9 @@
         title: '名称',
         dataIndex: 'name',
         scopedSlots: {customRender: 'name'}
+    }, {
+        title: '优先级',
+        dataIndex: 'order'
     }, {
         title: '创建日期',
         dataIndex: 'created_at'
@@ -78,9 +87,10 @@
                     name: ''
                 }
             },
-            edit(id, name) {
+            edit(id, name, order) {
                 this.update.id = id
                 this.update.name = name
+                this.update.order = order
                 this.show_editor = true
             },
             store() {
@@ -112,6 +122,14 @@
 </script>
 
 <style scoped>
+	label {
+		padding: 5px;
+	}
+
+	.ant-btn {
+		margin: 5px;
+	}
+
 	.input-area {
 		margin: 20px 0;
 	}

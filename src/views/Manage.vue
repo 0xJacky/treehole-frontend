@@ -1,28 +1,4 @@
 <template>
-	<!--<div class="manage">
-		<a-button @click="logout">注销</a-button>
-		<a-menu
-				v-model="current"
-				mode="horizontal"
-				class="categories-menu center"
-		>
-			<a-menu-item key="/admin/category" @click="$router.push('/admin/category')">
-				分类
-			</a-menu-item>
-			<a-menu-item key="/admin/report" @click="$router.push('/admin/report')">
-				举报
-			</a-menu-item>
-			<a-menu-item key="/admin/me" @click="$router.push('/admin/me')">
-				个人设置
-			</a-menu-item>
-			<a-menu-item key="/admin/settings" @click="$router.push('/admin/settings')">
-				全局设置
-			</a-menu-item>
-		</a-menu>
-		<a-card class="card manage-panel" title="管理" :bordered="false">
-			<router-view></router-view>
-		</a-card>
-	</div>-->
 	<a-row class="manage-container">
 		<a-col
 				class="sidebar"
@@ -34,26 +10,62 @@
 				:xxl="4"
 		>
 			<div class="avatar">
-				<h1>uSilo</h1>
-				<p>语闲管理系统</p>
+				<div class="info">
+					<h1>uSilo</h1>
+					<p>语闲管理系统</p>
+				</div>
 			</div>
 			<a-menu
 					mode="inline"
 					v-model="current"
 					:inlineCollapsed="collapsed"
 			>
-				<a-menu-item key="/admin/category" @click="$router.push('/admin/category')">
-					分类
-				</a-menu-item>
-				<a-menu-item key="/admin/report" @click="$router.push('/admin/report')">
-					举报
-				</a-menu-item>
-				<a-menu-item key="/admin/me" @click="$router.push('/admin/me')">
-					个人设置
-				</a-menu-item>
-				<a-menu-item key="/admin/settings" @click="$router.push('/admin/settings')">
-					全局设置
-				</a-menu-item>
+				<template>
+					<a-menu-item key="/admin/category" @click="$router.push('/admin/category')">
+						<a-icon type="folder"/>
+						<span>
+						分类
+						</span>
+					</a-menu-item>
+				</template>
+
+
+				<template>
+					<a-menu-item key="/admin/report" @click="$router.push('/admin/report')">
+						<a-icon type="clock-circle"/>
+						<span>
+							举报
+						</span>
+					</a-menu-item>
+				</template>
+
+				<template>
+					<a-menu-item key="/admin/users" @click="$router.push('/admin/users')">
+						<a-icon type="team"/>
+						<span>
+							管理用户
+						</span>
+					</a-menu-item>
+				</template>
+
+				<template>
+					<a-menu-item key="/admin/me" @click="$router.push('/admin/me')">
+						<a-icon type="user"/>
+						<span>
+							个人设置
+						</span>
+					</a-menu-item>
+				</template>
+
+				<template>
+					<a-menu-item key="/admin/settings" @click="$router.push('/admin/settings')">
+						<a-icon type="setting"/>
+						<span>
+							全局设置
+						</span>
+					</a-menu-item>
+				</template>
+
 			</a-menu>
 		</a-col>
 		<a-col
@@ -66,12 +78,8 @@
 				:xxl="20">
 			<header>
 				<div class="menu">
-          <span class="login_button">
-            <a-button type="link" @click="logout">注销</a-button>
-          </span>
-					<span class="login_button">
-            <a href="/"><a-button type="link">首页</a-button></a>
-          </span>
+					<span class="login_button"><a-button type="link" @click="logout">注销</a-button></span>
+					<span class="login_button"><a href="/"><a-button type="link">首页</a-button></a></span>
 				</div>
 			</header>
 			<div class="view">
@@ -86,7 +94,7 @@
 			</div>
 			<footer>
 				<div>
-					uSilo 1.0(Build)
+					© uSilo 2019
 				</div>
 				<div>
 					<a

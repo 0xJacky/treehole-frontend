@@ -63,6 +63,11 @@
         color: #FFFFFF;
     }
 
+    .ant-table-thead > tr > th {
+        background: transparent;
+        color: #fcfcfc;
+    }
+
     .ant-card-head-title {
         color: #FFFFFF !important;
     }

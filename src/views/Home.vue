@@ -32,10 +32,9 @@
 			</a-menu-item>
 		</a-menu>
 
-		<router-view/>
-
 		<a-timeline mode="alternate">
-			<a-timeline-item style="width: 89%; margin: 0 auto"
+			<a-timeline-item
+					style="width: 89%; margin: 0 auto"
 					v-for="post in posts"
 					:key="post.id">
 				<router-link :to="'/post/'+post.id" class="no_hover">
@@ -44,7 +43,11 @@
 			</a-timeline-item>
 		</a-timeline>
 
-		<p v-if="posts.length==0" class="center">空空如也</p>
+		<a-spin v-show="loading" class="center">
+			<a-icon slot="indicator" type="loading" style="font-size: 24px" spin/>
+		</a-spin>
+
+		<p v-if="posts.length==0 && !loading" class="center">空空如也</p>
 
 		<a-pagination
 				v-if="last_page > 1"
@@ -109,12 +112,14 @@
                 this.loading = false
             },
             get_list(pageNum = 1) {
+                this.loading = true
                 const t = this
                 const category = this.$route.params.category_id ? '&category=' + this.$route.params.category_id : ''
                 const init = this.categories.length == 0 ? '&init=true' : ''
                 this.$http.get('/post/list?page=' + pageNum + category + init)
                     .then((response) => {
                         this.handle_response(response.posts)
+                        this.loading = false
                         if (this.categories.length == 0) {
                             this.categories = response.categories
                             this.notice = response.notice
@@ -130,6 +135,7 @@
                         this.categories = response.categories
                         this.notice = response.notice
                         this.handle_response(response.posts)
+                        this.loading = false
                     })
                     .catch(function (error) {
                         this.$message.error(error.error)

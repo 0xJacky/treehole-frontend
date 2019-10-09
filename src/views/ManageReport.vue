@@ -16,12 +16,18 @@
 				{{ text }}
 			</template>
 			<template
+					slot="type"
+					slot-scope="text, record"
+			>
+				{{ record.post_id ? '动态' : '评论' }}
+			</template>
+			<template
 					slot="content"
 					slot-scope="text, record"
 			>
-				{{ record.post_id ? '动态: '+ (record.post.content.length > 25 ? record.post.content.substring(0,24)+'...'
+				{{ record.post_id ? (record.post.content.length > 25 ? record.post.content.substring(0,24)+'...'
 				:
-				record.post.content) : '评论: '+(record.comment.content.length > 25 ?
+				record.post.content) : (record.comment.content.length > 25 ?
 				record.comment.content.substring(0,24)+'...' : record.comment.content) }}
 			</template>
 			<template
@@ -71,6 +77,10 @@
         title: 'ID',
         dataIndex: 'id',
         scopedSlots: {customRender: 'id'}
+    }, {
+        title: '类型',
+        dataIndex: 'type',
+        scopedSlots: {customRender: 'type'}
     }, {
         title: '内容',
         dataIndex: 'content',

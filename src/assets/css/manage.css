@@ -1,6 +1,30 @@
 /* Copyright 2019 0xJacky */
+:root {
+    --background-color: #FFFFFF;
+    --content-color: #FFFFFF;
+    --text-color: unset;
+    --border-color: #d9d9d9;
+    --selected-color: #fafafa;
+    --link-color: #444;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #151617;
+        --content-color: #1d1e1f;
+        --text-color: #FFFFFF;
+        --border-color: #FFFFFF;
+        --selected-color: rgba(0, 0, 0, 0.85);
+        --link-color: #ffffff;
+    }
+
+    p, label {
+        color: #fcfcfc;
+    }
+}
+
 body {
-    background: #fcfcfc;
+    background: var(--content-color);
 }
 
 p {
@@ -13,7 +37,7 @@ p {
 
 .manage-container .sidebar {
     height: 100%;
-    background-color: #ffffff;
+    background-color: var(--background-color);
     border-right: 1px solid #e8e8e8;
     position: fixed;
 }

@@ -65,6 +65,12 @@ const router = new Router({
                     meta: {requiresAuth: true},
                 },
                 {
+                    path: 'users',
+                    name: '管理用户',
+                    component: () => import('./views/ManageUsers.vue'),
+                    meta: {requiresAuth: true},
+                },
+                {
                     path: 'me',
                     name: '个人设置',
                     component: () => import('./views/ManageMe.vue'),

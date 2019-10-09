@@ -6,7 +6,7 @@
 		>
 			<h2>写动态</h2>
 			<p>使用须知:</p>
-			<p>1. 语闲收集的数据</p>
+			<p>1. 请勿发布违反法律的内容</p>
 			<p>2. 请不要在动态中使用真实姓名</p>
 
 			<editor :categories="categories" @get_list="push"/>
