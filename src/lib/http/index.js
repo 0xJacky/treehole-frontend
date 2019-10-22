@@ -29,6 +29,7 @@ vueJsonp.install(http, 60000)
 // http request 拦截器
 http.interceptors.request.use(
     config => {
+        config.headers.Accept = `application/prs.usilo.v1+json`
         if (localStorage.getItem('ACCESS_TOKEN')) {
             // 判断是否存在token，如果存在的话，则每个http header都加上token
             config.headers.Authorization = `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`

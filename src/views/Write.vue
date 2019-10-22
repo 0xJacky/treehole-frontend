@@ -25,7 +25,7 @@
                 categories: []
             }
         },
-        beforeCreate() {
+        activated() {
             const t = this
             this.$http.get('/categories')
                 .then((response) => {
@@ -37,7 +37,7 @@
         },
         methods: {
             push() {
-                return this.$router.push('/home')
+                return this.$router.push('/home?from=write')
             }
         }
     }

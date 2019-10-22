@@ -102,7 +102,7 @@
                 }
             },
         },
-        beforeMount() {
+        created() {
             this.init()
         },
         methods: {

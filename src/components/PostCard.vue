@@ -19,7 +19,11 @@
 				<a href="#">删除</a> ·
 			</a-popconfirm>
 			<span class="category">{{ post.category.name }} · </span>
-			<span class="created-at">{{ moment(post.created_at).fromNow() }}</span>
+			<span class="created-at">{{ moment(post.created_at).fromNow() }} · </span>
+			<span>
+				浏览
+				{{ post.visits }}
+			</span>
 		</div>
 	</a-card>
 </template>

@@ -22,14 +22,14 @@
                 about: ''
             }
         },
-        beforeMount() {
+        activated() {
             const t = this
             this.$http.get('/about')
                 .then((response) => {
                     this.about = response.about
                 })
                 .catch(function (error) {
-                    t.$message.error(error.error)
+                    t.$message.error(error)
                 });
         },
     }

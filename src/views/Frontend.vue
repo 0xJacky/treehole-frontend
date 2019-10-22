@@ -64,7 +64,9 @@
 						:click-effect="false"
 						:hover-effect="false"
 						class="particles"></vue-particles>
-				<router-view @init="init"/>
+				<keep-alive :include="['Home', 'Write', 'About']">
+					<router-view @init="init"/>
+				</keep-alive>
 			</a-col>
 		</a-row>
 		<footer>

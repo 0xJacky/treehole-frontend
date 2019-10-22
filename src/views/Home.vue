@@ -4,7 +4,6 @@
 			<h1>语闲</h1>
 			<p>Write your story</p>
 		</div>
-
 		<a-alert
 				v-if="notice"
 				message="公告"
@@ -19,7 +18,7 @@
 				mode="horizontal"
 				class="categories-menu center"
 		>
-			<a-menu-item key="0">
+			<a-menu-item key="0" @click="get_list">
 				<router-link to="/home">
 					最新
 				</router-link>
@@ -38,7 +37,7 @@
 					v-for="post in posts"
 					:key="post.id">
 				<router-link :to="'/post/'+post.id" class="no_hover">
-					<post-card :post="post" @get_list="get_list"/>
+					<post-card :post="post" @get_list="get_list(1)"/>
 				</router-link>
 			</a-timeline-item>
 		</a-timeline>
@@ -48,17 +47,7 @@
 		</a-spin>
 
 		<p v-if="posts.length==0 && !loading" class="center auto-dark">空空如也</p>
-
-		<a-pagination
-				v-if="last_page > 1"
-				:default-current="1"
-				:default-page-size="per_page"
-				:total="total"
-				:current="current_page"
-				size="small"
-				class="pagination center"
-				@change="get_list"
-		/>
+		<p v-if="posts.length!==0&&noMore" class="center auto-dark">人家也是有底线的</p>
 	</div>
 </template>
 
@@ -67,7 +56,7 @@
     import PostCard from "@/components/PostCard"
 
     export default {
-        name: 'home',
+        name: 'Home',
         components: {
             PostCard
         },
@@ -82,15 +71,19 @@
                 current_page: '',
                 current: [this.$route.params.category_id ? this.$route.params.category_id : '0'],
                 post_id: null,
-                notice: ''
+                notice: '',
+                noMore: false
             }
         },
-        beforeMount() {
+        created() {
             if (this.$route.params.category_id) {
                 this.get_list()
             } else {
                 this.init()
             }
+        },
+        activated() {
+            this.scroll()
         },
         computed: {
             is_login() {
@@ -99,16 +92,28 @@
         },
         watch: {
             '$route'() {
-                this.get_list()
+                if (this.$route.fullPath.search('category') !== -1 || this.$route.fullPath.search('from') !== -1) {
+                    this.get_list()
+                }
             }
         },
         methods: {
             handle_response(response) {
+                if (response.current_page === response.last_page) {
+                    this.noMore = true
+                }
+                if (response.current_page < response.last_page) {
+                    this.noMore = false
+                }
+                if (response.current_page === 1) {
+                    this.posts = response.data
+                } else {
+                    this.posts.push.apply(this.posts, response.data)
+                }
                 this.per_page = response.per_page
                 this.total = response.total
                 this.last_page = response.last_page
                 this.current_page = response.current_page
-                this.posts = response.data
                 this.loading = false
             },
             get_list(pageNum = 1) {
@@ -130,6 +135,7 @@
                     });
             },
             init() {
+                const t = this;
                 this.$http.get('/frontend/home')
                     .then((response) => {
                         this.categories = response.categories
@@ -138,8 +144,29 @@
                         this.loading = false
                     })
                     .catch(function (error) {
-                        this.$message.error(error.error)
+                        t.$message.error(error)
                     });
+            },
+            scroll() {
+                window.onscroll = () => {
+                    // scrollTop 是滚动条滚动时，距离顶部的距离
+                    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                    // windowHeight 是可视区的高度
+                    let windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+                    // scrollHeight 是滚动条的总高度
+                    let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+                    // 滚动条到底部的条件
+                    if (scrollTop + windowHeight >= scrollHeight - 50 && !this.noMore) {
+                        this.current_page = this.current_page + 1
+                        this.loading = true
+                        const t = this
+                        this.$nextTick(() => {
+                            t.get_list(t.current_page)
+                            t.loading = false
+                        })
+
+                    }
+                }
             }
         }
     }
@@ -152,6 +179,10 @@
 
 	.no_hover:hover {
 		color: unset;
+	}
+
+	.ant-timeline-item {
+		padding: 0;
 	}
 
 	.ant-timeline-item-right .card {

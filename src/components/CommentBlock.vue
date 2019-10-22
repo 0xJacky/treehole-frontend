@@ -85,7 +85,7 @@
                 return this.$store.getters.is_login
             }
         },
-        beforeMount() {
+        created() {
             this.is_like(this.comment.id)
         },
         methods: {
