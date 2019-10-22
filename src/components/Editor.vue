@@ -4,8 +4,8 @@
 				v-model="update.content"
 				maxlength="200"
 				placeholder="有什么想告诉语闲的"
-				:row="2"
-				:autosize="{ minRows: 2, maxRows: 3 }"
+				:row="4"
+				:autosize="{ minRows: 4, maxRows: 5 }"
 		/>
 		<upload
 				:upload-url="upload_url"

@@ -47,7 +47,7 @@
 		</a-spin>
 
 		<p v-if="posts.length==0 && !loading" class="center auto-dark">空空如也</p>
-		<p v-if="posts.length!==0&&noMore" class="center auto-dark">人家也是有底线的</p>
+		<p v-if="posts.length!==0 && noMore" class="center auto-dark">人家也是有底线的</p>
 	</div>
 </template>
 
@@ -156,7 +156,7 @@
                     // scrollHeight 是滚动条的总高度
                     let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
                     // 滚动条到底部的条件
-                    if (scrollTop + windowHeight >= scrollHeight - 50 && !this.noMore) {
+                    if (scrollTop + windowHeight >= scrollHeight && !this.noMore) {
                         this.current_page = this.current_page + 1
                         this.loading = true
                         const t = this

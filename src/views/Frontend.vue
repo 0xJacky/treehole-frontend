@@ -69,6 +69,7 @@
 				</keep-alive>
 			</a-col>
 		</a-row>
+		<a-back-top />
 		<footer>
 			<a-row class="row center">
 				<a-col

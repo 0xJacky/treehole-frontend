@@ -7,7 +7,7 @@
 			</span>
 			<span>
 				<a-icon type="message"/>
-				{{ post.comments.total }}
+				{{ post.comments_total }}
 			</span>
 		</div>
 		<div class="post-content"><p>{{ post.content }}</p></div>

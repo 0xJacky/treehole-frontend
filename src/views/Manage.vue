@@ -32,7 +32,7 @@
 
 				<template>
 					<a-menu-item key="/admin/report" @click="$router.push('/admin/report')">
-						<a-icon type="clock-circle"/>
+						<a-icon type="exclamation-circle" />
 						<span>
 							举报
 						</span>

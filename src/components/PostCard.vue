@@ -24,6 +24,10 @@
 				浏览
 				{{ post.visits }}
 			</span>
+			<span v-if="post.comments>0">
+				· 评论
+				{{ post.comments }}
+			</span>
 		</div>
 	</a-card>
 </template>
